@@ -1,10 +1,10 @@
-package com.jansora.kg;
+package com.jansora.movie;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class KgApplicationTests {
+class MovieApplicationTests {
 
 	@Test
 	void contextLoads() {
