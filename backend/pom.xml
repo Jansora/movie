@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.jansora</groupId>
-	<artifactId>kg</artifactId>
+	<artifactId>movie</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>kg</name>
+	<name>movie</name>
 	<description>A movie search and kg based on elasticsearch and neo4j</description>
 
 	<properties>
