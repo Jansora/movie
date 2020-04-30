@@ -1,1 +1,11 @@
-
+spring:
+  data:
+    elasticsearch:
+      client:
+        reactive:
+          endpoints: 10.243.147.88:9200
+#          username: elastic
+#          password: changeme
+  elasticsearch:
+    rest:
+#      uris: http://10.243.147.88:9200
