@@ -31,11 +31,11 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public Mono<Void> delete(Long id) {
+    public Mono<Void> delete(String id) {
         return userRepository.deleteById(id);
     }
 
-    public Mono<User> findById(Long id) {
+    public Mono<User> findById(String id) {
         return userRepository.findById(id);
     }
     public Flux<User> findAll() {

@@ -2,9 +2,7 @@ package com.jansora.movie.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 import org.springframework.data.annotation.Id;
@@ -30,23 +28,25 @@ import java.io.Serializable;
 @SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
-@Document(indexName = "user-index", type = "user")
-public class User implements Serializable {
+@Document(indexName = "movie-index", type = "movie")
+public class Movie implements Serializable {
     @Id
     private String id;
 
-    private String userId;
+    private String name;
+
+    private String type;
 
     private String score;
 
-    private String username;
+    private String actor;
 
-    @Field(type = FieldType.Date)
-    private String commentDate;
 
-    private String movie;
+    private String director;
 
-    private String type;
+    private String area;
+
+    private String feature;
 
 
 }

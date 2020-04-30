@@ -4,10 +4,12 @@ import com.jansora.movie.model.User;
 import com.jansora.movie.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
@@ -33,29 +35,29 @@ public class UserController {
 
     @GetMapping("findAll")
     public Flux<User> findAll() {
-        Flux<User> user = userService.findAll();
-        return user;
+
+        return userService.findAll();
     }
     @GetMapping("findById/{id}")
-    public Mono<User> findById(@PathVariable Long id) {
+    public Mono<User> findById(@PathVariable String id) {
         return userService.findById(id)
                 .doOnSubscribe((val)-> log.info("findById user: id={} ", id))
                 .doOnSuccess((val) -> log.info("found user: {}", val));
     }
 
     @PostMapping("add")
-    public Mono<User> add(User user) {
+    public Mono<User> add(@RequestBody User user) {
         return userService.add(user);
     }
 
     @PostMapping("update/{id}")
-    public Mono<User> update(@PathVariable Long id, User user) {
+    public Mono<User> update(@PathVariable String id, User user) {
         user.setId(id);
         return userService.update(user);
     }
 
     @DeleteMapping("delete/{id}")
-    public Mono<Void> delete(@PathVariable Long id) {
+    public Mono<Void> delete(@PathVariable String id) {
         return userService.delete(id);
     }
 }

@@ -20,11 +20,13 @@ class UserTests {
 
     @Test
     void testAddUser() {
-        User user = User.builder().id(1L).score("").type("").username("heheda").movie("2442").build();
+        User user = User.builder().id("1L").score("").type("").username("heheda").movie("2442").build();
 
-//        Mono<User> user1 = userService.AddUser(user);
-//
-//        System.out.println(user);
+        Mono<User> user1 = userService.add(user);
+
+
+
+        System.out.println(user);
 
     }
 }

@@ -6,7 +6,7 @@ import org.springframework.data.elasticsearch.repository.ReactiveElasticsearchRe
 import java.util.List;
 
 
-public interface UserRepository extends ReactiveElasticsearchRepository<User, Long> {
+public interface UserRepository extends ReactiveElasticsearchRepository<User, String> {
 
     List<User> findByUsername(String username);
 
