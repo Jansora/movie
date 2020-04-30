@@ -1,6 +1,6 @@
 package com.jansora.movie;
 
-import com.jansora.movie.entity.User;
+import com.jansora.movie.model.User;
 import com.jansora.movie.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,9 +22,9 @@ class UserTests {
     void testAddUser() {
         User user = User.builder().id(1L).score("").type("").username("heheda").movie("2442").build();
 
-        Mono<User> user1 = userService.AddUser(user);
-
-        System.out.println(user);
+//        Mono<User> user1 = userService.AddUser(user);
+//
+//        System.out.println(user);
 
     }
 }

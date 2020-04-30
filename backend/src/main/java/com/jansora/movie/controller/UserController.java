@@ -1,7 +1,8 @@
 package com.jansora.movie.controller;
 
-import com.jansora.movie.entity.User;
+import com.jansora.movie.model.User;
 import com.jansora.movie.service.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,7 +24,8 @@ import reactor.core.publisher.Mono;
  * @since [产品/模块版本] （可选）
  */
 @RestController
-@RequestMapping("user")
+@Slf4j
+@RequestMapping("/user")
 public class UserController {
 
     @Autowired
@@ -31,11 +33,14 @@ public class UserController {
 
     @GetMapping("findAll")
     public Flux<User> findAll() {
-        return userService.findAll();
+        Flux<User> user = userService.findAll();
+        return user;
     }
     @GetMapping("findById/{id}")
     public Mono<User> findById(@PathVariable Long id) {
-        return userService.findById(id);
+        return userService.findById(id)
+                .doOnSubscribe((val)-> log.info("findById user: id={} ", id))
+                .doOnSuccess((val) -> log.info("found user: {}", val));
     }
 
     @PostMapping("add")

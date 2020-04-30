@@ -1,13 +1,11 @@
 package com.jansora.movie.service;
 
-import com.jansora.movie.entity.User;
+import com.jansora.movie.model.User;
 import com.jansora.movie.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-
-import java.util.Optional;
 
 /*
  * 〈一句话功能简述〉<br>
