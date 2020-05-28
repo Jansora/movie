@@ -28,24 +28,25 @@ import java.io.Serializable;
 @SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
-@Document(indexName = "movie-index", type = "movie")
+@Document(indexName = "movie")
 public class Movie implements Serializable {
     @Id
     private String id;
 
+    @Field(type = FieldType.Text, analyzer = "ik_max_word")
     private String name;
-
+    @Field
     private String type;
-
+    @Field
     private String score;
-
+    @Field
     private String actor;
 
-
+    @Field
     private String director;
-
+    @Field
     private String area;
-
+    @Field
     private String feature;
 
 

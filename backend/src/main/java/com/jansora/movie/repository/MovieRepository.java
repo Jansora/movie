@@ -8,6 +8,6 @@ import java.util.List;
 
 public interface MovieRepository extends ReactiveElasticsearchRepository<Movie, String> {
 
-    List<Movie> findByUsername(String username);
+    List<Movie> findFirstByName(String username);
 
 }

@@ -8,4 +8,4 @@ spring:
 #          password: changeme
   elasticsearch:
     rest:
-#      uris: http://10.243.147.88:9200
+      uris: http://10.243.147.88:9200

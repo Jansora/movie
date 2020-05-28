@@ -8,10 +8,12 @@ import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 
+import java.awt.*;
 import java.io.Serializable;
 
 /*
@@ -30,7 +32,7 @@ import java.io.Serializable;
 @SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
-@Document(indexName = "user-index", type = "user")
+@Document(indexName = "user")
 public class User implements Serializable {
     @Id
     private String id;
