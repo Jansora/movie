@@ -8,11 +8,10 @@
 
 package com.jansora.movie.controller;
 
-import com.jansora.movie.model.Movie;
+import com.jansora.movie.model.elasticsearch.Movie;
 import com.jansora.movie.service.MovieService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -45,6 +44,7 @@ public class MovieController {
 
     @PostMapping("add")
     public Mono<Movie> add(@RequestBody Movie movie) {
+
         return movieService.add(movie);
     }
 

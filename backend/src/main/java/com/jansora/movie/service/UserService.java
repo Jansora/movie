@@ -1,7 +1,7 @@
 package com.jansora.movie.service;
 
-import com.jansora.movie.model.User;
-import com.jansora.movie.repository.UserRepository;
+import com.jansora.movie.model.elasticsearch.User;
+import com.jansora.movie.repo.elaticsearch.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;

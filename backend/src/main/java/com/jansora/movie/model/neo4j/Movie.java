@@ -1,19 +1,16 @@
-package com.jansora.movie.model;
+package com.jansora.movie.model.neo4j;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
+import org.neo4j.ogm.annotation.GeneratedValue;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 
-import java.awt.*;
 import java.io.Serializable;
 
 /*
@@ -32,23 +29,27 @@ import java.io.Serializable;
 @SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
-@Document(indexName = "user")
-public class User implements Serializable {
+@Document(indexName = "movie")
+public class Movie implements Serializable {
     @Id
+    @GeneratedValue
     private String id;
 
-    private String userId;
-
-    private String score;
-
-    private String username;
-
-    @Field(type = FieldType.Date)
-    private String commentDate;
-
-    private String movie;
-
+    @Field(type = FieldType.Text, analyzer = "ik_max_word")
+    private String name;
+    @Field
     private String type;
+    @Field
+    private String score;
+    @Field
+    private String actor;
+
+    @Field
+    private String director;
+    @Field
+    private String area;
+    @Field
+    private String feature;
 
 
 }

@@ -1,6 +1,6 @@
-package com.jansora.movie.repository;
+package com.jansora.movie.repo.elaticsearch;
 
-import com.jansora.movie.model.User;
+import com.jansora.movie.model.elasticsearch.User;
 import org.springframework.data.elasticsearch.repository.ReactiveElasticsearchRepository;
 
 import java.util.List;

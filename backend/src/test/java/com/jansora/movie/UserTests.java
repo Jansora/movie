@@ -1,6 +1,6 @@
 package com.jansora.movie;
 
-import com.jansora.movie.model.User;
+import com.jansora.movie.model.elasticsearch.User;
 import com.jansora.movie.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

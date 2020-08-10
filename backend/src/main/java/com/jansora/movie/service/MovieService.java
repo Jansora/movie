@@ -1,7 +1,7 @@
 package com.jansora.movie.service;
 
-import com.jansora.movie.model.Movie;
-import com.jansora.movie.repository.MovieRepository;
+import com.jansora.movie.model.elasticsearch.Movie;
+import com.jansora.movie.repo.elaticsearch.MovieRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
@@ -16,8 +16,11 @@ import reactor.core.publisher.Mono;
 @Service
 public class MovieService {
 
+
+
     @Autowired
     private MovieRepository movieRepository;
+
 
     public Mono<Movie> add(Movie movie) {
         return movieRepository.save(movie);

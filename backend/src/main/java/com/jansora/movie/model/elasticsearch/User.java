@@ -1,4 +1,4 @@
-package com.jansora.movie.model;
+package com.jansora.movie.model.elasticsearch;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -28,26 +28,23 @@ import java.io.Serializable;
 @SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
-@Document(indexName = "movie")
-public class Movie implements Serializable {
+@Document(indexName = "user")
+public class User implements Serializable {
     @Id
     private String id;
 
-    @Field(type = FieldType.Text, analyzer = "ik_max_word")
-    private String name;
-    @Field
-    private String type;
-    @Field
-    private String score;
-    @Field
-    private String actor;
+    private String userId;
 
-    @Field
-    private String director;
-    @Field
-    private String area;
-    @Field
-    private String feature;
+    private String score;
+
+    private String username;
+
+    @Field(type = FieldType.Date)
+    private String commentDate;
+
+    private String movie;
+
+    private String type;
 
 
 }

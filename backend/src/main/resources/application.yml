@@ -1,5 +1,12 @@
+
+
 spring:
   data:
+    neo4j:
+      username: neo4j
+      password: 123456
+      uri: bolt://10.243.146.211:7687
+
     elasticsearch:
       client:
         reactive:
@@ -9,3 +16,4 @@ spring:
   elasticsearch:
     rest:
       uris: http://10.243.147.88:9200
+
