@@ -92,9 +92,9 @@ public class User implements Serializable {
                 );
 
 
-        user.append(String.format(" MERGE (u:user, { name: '%s' }) " +
-                        " ON CREATE SET %s  u.created = %s, u.updated = %s " +
-                        " ON MATCH  SET %s  u.updated = %s " ,
+        user.append(String.format(" MERGE (u:user, { name:\"%s\" }) " +
+                        " ON CREATE SET %s  u.created = \"%s\", u.updated = \"%s\" " +
+                        " ON MATCH  SET %s  u.updated = \"%s\" " ,
                 getName(),
                 properties, Utils.GetCurDate(), Utils.GetCurDate(),
                 properties, Utils.GetCurDate()

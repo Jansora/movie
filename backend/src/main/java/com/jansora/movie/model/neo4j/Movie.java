@@ -124,9 +124,9 @@ public class Movie implements Serializable {
 
         );
 
-        movie.append(String.format(" MERGE (m:movie, { name: '%s' }) " +
-                " ON CREATE SET %s  m.created = %s, m.updated = %s " +
-                " ON MATCH  SET %s  m.updated = %s " ,
+        movie.append(String.format(" MERGE (m:movie, { name: \"%s\" }) " +
+                " ON CREATE SET %s  m.created = \"%s\", m.updated = \"%s\" " +
+                " ON MATCH  SET %s  m.updated = \"%s\" " ,
                 getName(),
                 properties, Utils.GetCurDate(), Utils.GetCurDate(),
                 properties, Utils.GetCurDate()
