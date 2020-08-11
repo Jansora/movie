@@ -42,7 +42,6 @@ public class User implements Serializable {
 
     private String username;
 
-    @Properties
     private String commentDate;
 
     private String movie;

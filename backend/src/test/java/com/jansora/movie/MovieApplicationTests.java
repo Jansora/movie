@@ -16,6 +16,7 @@ class MovieApplicationTests {
     void contextLoads() {
     }
 
+
     @Test
     void addMovie() {
 
