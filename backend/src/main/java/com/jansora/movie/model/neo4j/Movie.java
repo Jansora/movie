@@ -71,7 +71,6 @@ public class Movie implements Serializable {
 
     public void insertToNeo4j(Session session) {
 
-        StringBuilder result = new StringBuilder();
         StringBuilder movie = new StringBuilder();
         ArrayList<String> fields = new ArrayList<>();
         StringBuilder properties = new StringBuilder();
@@ -80,34 +79,35 @@ public class Movie implements Serializable {
             .forEach( field -> {
                 try {
                     String curName = field.getName();
-                    String value = field.get(this).toString();
+                    String value = field.get(this).toString()
+                            .replace("[", "").replace("]", "");
                     if(!"".equals(properties.toString())) {
                         properties.append(",");
                     }
-                    properties.append(String.format(" %s: '%s' ", curName, value));
+                    properties.append(String.format(" %s: \"%s\" ", curName, value));
 
                     if(!"name".equals(curName)) {
                         if("actor".equals(curName) || "director".equals(curName)) {
-//                            String[] persons = value.split("\\|");
+
                             List<String> persons = new ArrayList<>();
                             if("actor".equals(curName)) persons = this.getActor();
                             if("director".equals(curName)) persons = this.getDirector();
 
-                            persons.stream().forEach( person -> {
-                                fields.add(String.format(" MERGE (:%s {name: '%s' }); ",
+                            persons.forEach(person -> {
+                                fields.add(String.format(" MERGE (:%s {name: \"%s\" }); ",
                                         curName, person));
-                                relationShips.add(String.format(" MATCH (m:movie {name: '%s' }) " +
-                                                "MATCH (a:%s {name: '%s'}) " +
+                                relationShips.add(String.format(" MATCH (m:movie {name: \"%s\" }) " +
+                                                "MATCH (a:%s {name: \"%s\"}) " +
                                                 "MERGE (a)-[:%sOf]->(m) MERGE (m)-[:%sIs]->(a) ;",
                                         this.getName(), curName, person, curName, curName));
                             });
                             return;
                         }
 
-                        fields.add(String.format(" MERGE (:%s {name: '%s' }); ", curName, value));
+                        fields.add(String.format(" MERGE (:%s {name: \"%s\" }); ", curName, value));
 
-                        relationShips.add(String.format(" MATCH (m:movie {name: '%s' }) " +
-                                "MATCH (a:%s {name: '%s'}) " +
+                        relationShips.add(String.format(" MATCH (m:movie {name: \"%s\" }) " +
+                                "MATCH (a:%s {name: \"%s\"}) " +
                                 "MERGE (a)-[:%sOf]->(m) MERGE (m)-[:%sIs]->(a) ;",
                                 this.getName(), curName, value, curName, curName));
                     }
@@ -122,64 +122,11 @@ public class Movie implements Serializable {
         );
         movie.append(String.format("MERGE (m:movie { %s }) ;", properties));
 
-
-
         session.run(movie.toString());
         fields.forEach(session::run);
         relationShips.forEach(session::run);
 
-
-
     }
 
 
-
-
-    public String buildCQL(Session session) {
-        StringBuilder result = new StringBuilder();
-        result.append(String.format("MERGE (m:movie { %s }) ",
-                buildProperty()));
-
-        return result.toString();
-    }
-
-    private String buildTypeCQL() {
-        StringBuilder area = new StringBuilder();
-        area.append(String.format("MERGE (:type {name: '%s' })", area));
-        return area.toString();
-    }
-
-    private String buildAreaCQL() {
-        StringBuilder area = new StringBuilder();
-        area.append(String.format("MERGE (:area {name: '%s' });", area));
-        area.append(String.format(" MATCH (m:movie {name: '%s' }) " +
-                "MATCH (a:area {name: '%s'}) " +
-                "MERGE (a)-[:areaOf]->(m) MERGE (m)-[:areaWith]->(a)\n", name, area));
-        return area.toString();
-    }
-
-    private String buildRelationShip() {
-        StringBuilder relationShip = new StringBuilder();
-        relationShip.append(String.format("type: '%s', ", type));
-        relationShip.append(String.format("area: '%s', ", area));
-        relationShip.append(String.format("actor: '%s', ", actor.toString()));
-        relationShip.append(String.format("director: '%s', ", director.toString()));
-        relationShip.append(String.format("name: '%s', ", name));
-        relationShip.append(String.format("feature: '%s', ", feature));
-        relationShip.append(String.format("score: '%s', ", score));
-
-        return relationShip.toString();
-    }
-    private String buildProperty() {
-        StringBuilder property = new StringBuilder();
-        property.append(String.format("type: '%s', ", type));
-        property.append(String.format("area: '%s', ", area));
-        property.append(String.format("actor: '%s', ", actor.toString()));
-        property.append(String.format("director: '%s', ", director.toString()));
-        property.append(String.format("name: '%s', ", name));
-        property.append(String.format("feature: '%s', ", feature));
-        property.append(String.format("score: '%s', ", score));
-
-        return property.toString();
-    }
 }

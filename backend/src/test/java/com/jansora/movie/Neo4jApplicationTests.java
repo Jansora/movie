@@ -2,6 +2,7 @@ package com.jansora.movie;
 
 import com.jansora.movie.client.Neo4jClient;
 import com.jansora.movie.model.neo4j.Movie;
+import com.jansora.movie.model.neo4j.User;
 import org.junit.jupiter.api.Test;
 
 import org.neo4j.driver.Record;
@@ -33,15 +34,24 @@ class Neo4jApplicationTests {
 
 
     @Test
+    void add() {
+        System.out.println("add-movie--start" + System.currentTimeMillis());
+        addMovies();
+        System.out.println("add-movie--completed" + System.currentTimeMillis());
+
+        System.out.println("add-user--start" + System.currentTimeMillis());
+        addUsers();
+        System.out.println("add-user--completed" + System.currentTimeMillis());
+
+    }
+
+
+    @Test
     void addMovies() {
 
         Neo4jClient client = new Neo4jClient();
         Session session = client.getSession();
 
-        List<List<String>> records = new ArrayList<>();
-        String[] headers = new String[]{"type","actor","area","director","feature","score","name"};
-
-        System.out.println(Paths.get(""));
         Path path = Paths.get(System.getProperty("user.dir"), "src", "test", "movie.csv");
 
         System.out.println("Working Directory = " + path.toString());
@@ -51,7 +61,7 @@ class Neo4jApplicationTests {
             AtomicInteger i = new AtomicInteger(0);
             while ((line = br.readLine()) != null ) {
                 if(0 == i.getAndIncrement()) continue;
-//                if (i.get() == 100) break;
+                line = line.replace("'", "").replace("\"", "");
                 Movie movie =  new Movie(line.split(","));
                 movie.insertToNeo4j(session);
             }
@@ -64,18 +74,32 @@ class Neo4jApplicationTests {
 
 
     @Test
-    void addMovie() {
+    void addUsers() {
 
         Neo4jClient client = new Neo4jClient();
         Session session = client.getSession();
-        Result result = session.run(
-                "CREATE (baeldung:Company {name:\"Baeldung\"}) " +
-                        "-[:owns]-> (tesla:Car {make: 'tesla', model: 'modelX'})" +
-                        "RETURN baeldung, tesla");
-        List<Record> rs = result.list();
-        System.out.println(rs);
+
+        Path path = Paths.get(System.getProperty("user.dir"), "src", "test", "user.csv");
+
+        System.out.println("Working Directory = " + path.toString());
+
+        try (BufferedReader br = new BufferedReader(new FileReader(path.toString()))) {
+            String line;
+            AtomicInteger i = new AtomicInteger(0);
+            while ((line = br.readLine()) != null ) {
+                if(0 == i.getAndIncrement()) continue;
+                line = line.replace("'", "").replace("\"", "");
+                User user =  new User(line.split(","));
+                user.insertToNeo4j(session);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
 
     }
+
+
 
 
 
