@@ -17,7 +17,7 @@ import org.neo4j.driver.Session;
  */
 public class Neo4jClient {
     private static final Driver driver = GraphDatabase.driver(
-            "bolt://10.243.147.87:7687", AuthTokens.basic("neo4j", "123456"));
+            "bolt://10.243.147.88:7687", AuthTokens.basic("neo4j", "123456"));
 
     public Session getSession() {
         return driver.session();

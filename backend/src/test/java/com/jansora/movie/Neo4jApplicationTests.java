@@ -51,8 +51,9 @@ class Neo4jApplicationTests {
             AtomicInteger i = new AtomicInteger(0);
             while ((line = br.readLine()) != null ) {
                 if(0 == i.getAndIncrement()) continue;
+//                if (i.get() == 100) break;
                 Movie movie =  new Movie(line.split(","));
-                records.add(Arrays.asList(line.split(",")));
+                movie.insertToNeo4j(session);
             }
         } catch (IOException e) {
             e.printStackTrace();
