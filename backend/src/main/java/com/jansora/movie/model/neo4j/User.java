@@ -7,17 +7,10 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 import org.neo4j.driver.Session;
-import org.neo4j.ogm.annotation.NodeEntity;
-import org.neo4j.ogm.annotation.Properties;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.elasticsearch.annotations.Document;
-import org.springframework.data.elasticsearch.annotations.Field;
-import org.springframework.data.elasticsearch.annotations.FieldType;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 /*
  * 〈一句话功能简述〉<br>
@@ -73,14 +66,15 @@ public class User implements Serializable {
                             try {
                                 String curName = field.getName();
                                 String value = field.get(this).toString();
-                                if(!"".equals(properties.toString())) {
-                                    properties.append(",");
-                                }
-                                properties.append(String.format(" %s: \"%s\" ", curName, value));
 
-                                if(!"name".equals(curName)) {
+                                properties.append(String.format(" user.%s: \"%s\" ", curName, value));
 
-                                    fields.add(String.format(" MERGE (:%s {name: \"%s\" }); ", curName, value));
+                                if("movie".equals(curName)) {
+                                    fields.add(String.format(" MERGE (m:%s {name: \"%s\" })" +
+                                                    "ON CREATE SET m.name =  \"%s\" , m.created = \"%s\" , m.updated = \"%s\" " +
+                                                    "ON MATCH  SET m.name =  \"%s\" , m.updated = \"%s\" ",
+                                            curName, value, value, Utils.GetCurDate(), Utils.GetCurDate(), value, Utils.GetCurDate()));
+
 
                                     relationShips.add(String.format(" MATCH (u:user {name: \"%s\" }) " +
                                                     "MATCH (a:%s {name: \"%s\"}) " +
@@ -96,7 +90,15 @@ public class User implements Serializable {
                         }
 
                 );
-        user.append(String.format("MERGE (:user { %s }) ;", properties));
+
+
+        user.append(String.format(" MERGE (u:user, { name: '%s' }) " +
+                        " ON CREATE SET %s  u.created = %s, u.updated = %s " +
+                        " ON MATCH  SET %s  u.updated = %s " ,
+                getName(),
+                properties, Utils.GetCurDate(), Utils.GetCurDate(),
+                properties, Utils.GetCurDate()
+        ));
 
         session.run(user.toString());
         fields.forEach(session::run);

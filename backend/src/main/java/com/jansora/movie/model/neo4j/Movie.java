@@ -7,13 +7,9 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 import org.neo4j.driver.Session;
-import org.neo4j.ogm.annotation.GeneratedValue;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.elasticsearch.annotations.Document;
-import org.springframework.data.elasticsearch.annotations.Field;
-import org.springframework.data.elasticsearch.annotations.FieldType;
 
 import java.io.Serializable;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -81,12 +77,11 @@ public class Movie implements Serializable {
                     String curName = field.getName();
                     String value = field.get(this).toString()
                             .replace("[", "").replace("]", "");
-                    if(!"".equals(properties.toString())) {
-                        properties.append(",");
-                    }
-                    properties.append(String.format(" %s: \"%s\" ", curName, value));
+
+                    properties.append(String.format(" m.%s: \"%s\" ", curName, value));
 
                     if(!"name".equals(curName)) {
+
                         if("actor".equals(curName) || "director".equals(curName)) {
 
                             List<String> persons = new ArrayList<>();
@@ -94,8 +89,11 @@ public class Movie implements Serializable {
                             if("director".equals(curName)) persons = this.getDirector();
 
                             persons.forEach(person -> {
-                                fields.add(String.format(" MERGE (:%s {name: \"%s\" }); ",
-                                        curName, person));
+                                fields.add(String.format(" MERGE (person:%s {name: \"%s\" })" +
+                                        "ON CREATE SET person.name =  \"%s\" , person.created = \"%s\" , person.updated = \"%s\" " +
+                                        "ON MATCH  SET person.name =  \"%s\" , person.updated = \"%s\" ",
+                                        curName, person, person, Utils.GetCurDate(), Utils.GetCurDate(), person, Utils.GetCurDate()));
+
                                 relationShips.add(String.format(" MATCH (m:movie {name: \"%s\" }) " +
                                                 "MATCH (a:%s {name: \"%s\"}) " +
                                                 "MERGE (a)-[:%sOf]->(m) MERGE (m)-[:%sIs]->(a) ;",
@@ -104,12 +102,17 @@ public class Movie implements Serializable {
                             return;
                         }
 
-                        fields.add(String.format(" MERGE (:%s {name: \"%s\" }); ", curName, value));
+                        if(!"score".equals(curName)) {
+                            fields.add(String.format(" MERGE (person:%s {name: \"%s\" })" +
+                                            "ON CREATE SET person.name =  \"%s\" , person.created = \"%s\" , person.updated = \"%s\" " +
+                                            "ON MATCH  SET person.name =  \"%s\" , person.updated = \"%s\" ",
+                                    curName, value, value, Utils.GetCurDate(), Utils.GetCurDate(), value, Utils.GetCurDate()));
 
-                        relationShips.add(String.format(" MATCH (m:movie {name: \"%s\" }) " +
-                                "MATCH (a:%s {name: \"%s\"}) " +
-                                "MERGE (a)-[:%sOf]->(m) MERGE (m)-[:%sIs]->(a) ;",
-                                this.getName(), curName, value, curName, curName));
+                            relationShips.add(String.format(" MATCH (m:movie {name: \"%s\" }) " +
+                                            "MATCH (a:%s {name: \"%s\"}) " +
+                                            "MERGE (a)-[:%sOf]->(m) MERGE (m)-[:%sIs]->(a) ;",
+                                    this.getName(), curName, value, curName, curName));
+                        }
                     }
 
 
@@ -120,7 +123,14 @@ public class Movie implements Serializable {
             }
 
         );
-        movie.append(String.format("MERGE (m:movie { %s }) ;", properties));
+
+        movie.append(String.format(" MERGE (m:movie, { name: '%s' }) " +
+                " ON CREATE SET %s  m.created = %s, m.updated = %s " +
+                " ON MATCH  SET %s  m.updated = %s " ,
+                getName(),
+                properties, Utils.GetCurDate(), Utils.GetCurDate(),
+                properties, Utils.GetCurDate()
+        ));
 
         session.run(movie.toString());
         fields.forEach(session::run);

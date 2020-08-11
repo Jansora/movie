@@ -61,6 +61,7 @@ class Neo4jApplicationTests {
             AtomicInteger i = new AtomicInteger(0);
             while ((line = br.readLine()) != null ) {
                 if(0 == i.getAndIncrement()) continue;
+                if(i.get() == 1000) return;
                 line = line.replace("'", "").replace("\"", "");
                 Movie movie =  new Movie(line.split(","));
                 movie.insertToNeo4j(session);
@@ -88,6 +89,7 @@ class Neo4jApplicationTests {
             AtomicInteger i = new AtomicInteger(0);
             while ((line = br.readLine()) != null ) {
                 if(0 == i.getAndIncrement()) continue;
+                if(i.get() == 1000) return;
                 line = line.replace("'", "").replace("\"", "");
                 User user =  new User(line.split(","));
                 user.insertToNeo4j(session);

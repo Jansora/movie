@@ -1,6 +1,7 @@
 package com.jansora.movie;
 
 import java.lang.reflect.Field;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 
 /*
@@ -31,10 +32,12 @@ public class Utils {
         }
 
     });
-
-
-
     }
 
+
+    public static String GetCurDate() {
+        return java.time.LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME).replace("T", "");
+
+    }
 
 }
