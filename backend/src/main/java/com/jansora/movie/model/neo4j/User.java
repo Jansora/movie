@@ -1,6 +1,6 @@
 package com.jansora.movie.model.neo4j;
 
-import com.jansora.movie.Utils;
+import com.jansora.movie.utils.ObjectUtils;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -52,7 +52,7 @@ public class User implements Serializable {
         } else {
             throw new IllegalArgumentException("args is null or args length is error");
         }
-        Utils.AssertArgsIsNotNull(this, this.getClass());
+        ObjectUtils.AssertArgsIsNotNull(this, this.getClass());
     }
 
     public void insertToNeo4j(Session session) {
@@ -67,13 +67,13 @@ public class User implements Serializable {
                                 String curName = field.getName();
                                 String value = field.get(this).toString();
 
-                                properties.append(String.format(" user.%s: \"%s\" ", curName, value));
+                                properties.append(String.format(" u.%s=\"%s\" , ", curName, value));
 
                                 if("movie".equals(curName)) {
                                     fields.add(String.format(" MERGE (m:%s {name: \"%s\" })" +
                                                     "ON CREATE SET m.name =  \"%s\" , m.created = \"%s\" , m.updated = \"%s\" " +
                                                     "ON MATCH  SET m.name =  \"%s\" , m.updated = \"%s\" ",
-                                            curName, value, value, Utils.GetCurDate(), Utils.GetCurDate(), value, Utils.GetCurDate()));
+                                            curName, value, value, ObjectUtils.GetCurDate(), ObjectUtils.GetCurDate(), value, ObjectUtils.GetCurDate()));
 
 
                                     relationShips.add(String.format(" MATCH (u:user {name: \"%s\" }) " +
@@ -92,12 +92,12 @@ public class User implements Serializable {
                 );
 
 
-        user.append(String.format(" MERGE (u:user, { name:\"%s\" }) " +
+        user.append(String.format(" MERGE (u:user { name:\"%s\" }) " +
                         " ON CREATE SET %s  u.created = \"%s\", u.updated = \"%s\" " +
                         " ON MATCH  SET %s  u.updated = \"%s\" " ,
                 getName(),
-                properties, Utils.GetCurDate(), Utils.GetCurDate(),
-                properties, Utils.GetCurDate()
+                properties, ObjectUtils.GetCurDate(), ObjectUtils.GetCurDate(),
+                properties, ObjectUtils.GetCurDate()
         ));
 
         session.run(user.toString());

@@ -12,7 +12,7 @@ import java.util.List;
  * @file Result.java
  * @description Result
  *
- * @author 18044846
+ * @author Jansora
  * @date 2020-06-03 11:07
  * @see [相关类/方法]（可选）
  * @since [产品/模块版本] （可选）
@@ -21,25 +21,25 @@ import java.util.List;
 @Data
 @ToString
 @Builder
-public class Result<T> implements Serializable {
+public class Result implements Serializable {
     private int total;
     private Object data;
     private String message;
     private Boolean status = true;
 
-    public final Result setSuccess(List<T> data) {
+    public final Result setSuccess(List data) {
         return Result.builder()
                 .status(true)
-                .data((Object) data).build();
+                .data(data).build();
     }
     public final Result setSuccess(T data) {
         return Result.builder()
                 .status(true)
-                .data((Object) data).build();
+                .data(data).build();
     }
 
     public final Result setFailed (String message) {
-        return (Result) Result.builder()
+        return Result.builder()
                 .status(false)
                 .data(data).build();
     }

@@ -17,7 +17,6 @@ class MovieApplicationTests {
     }
 
 
-    @Test
     void addMovie() {
 
         reactiveElasticsearchTemplate.save(Movie.builder().name("斗地主5").build())

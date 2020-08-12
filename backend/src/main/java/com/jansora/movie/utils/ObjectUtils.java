@@ -1,4 +1,4 @@
-package com.jansora.movie;
+package com.jansora.movie.utils;
 
 import java.lang.reflect.Field;
 import java.time.format.DateTimeFormatter;
@@ -9,12 +9,12 @@ import java.util.Arrays;
  * @file Utils.java
  * @description Utils
  *
- * @author 18044846 张洋源
+ * @author Jansora
  * @date 2020-08-11 10:14
  * @see [相关类/方法]（可选）
  * @since [产品/模块版本] （可选）
  */
-public class Utils {
+public class ObjectUtils {
 
     public static void AssertArgsIsNotNull(Object o, Class clazz) throws IllegalArgumentException {
 
@@ -36,7 +36,7 @@ public class Utils {
 
 
     public static String GetCurDate() {
-        return java.time.LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME).replace("T", "");
+        return java.time.LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME).replace("T", " ");
 
     }
 

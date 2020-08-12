@@ -1,6 +1,6 @@
 package com.jansora.movie.model.neo4j;
 
-import com.jansora.movie.Utils;
+import com.jansora.movie.utils.ObjectUtils;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,7 +9,6 @@ import lombok.experimental.SuperBuilder;
 import org.neo4j.driver.Session;
 
 import java.io.Serializable;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -61,7 +60,7 @@ public class Movie implements Serializable {
         } else {
             throw new IllegalArgumentException("args is null or args length is error");
         }
-        Utils.AssertArgsIsNotNull(this, this.getClass());
+        ObjectUtils.AssertArgsIsNotNull(this, this.getClass());
     }
 
 
@@ -78,7 +77,7 @@ public class Movie implements Serializable {
                     String value = field.get(this).toString()
                             .replace("[", "").replace("]", "");
 
-                    properties.append(String.format(" m.%s: \"%s\" ", curName, value));
+                    properties.append(String.format(" m.%s=\"%s\" , ", curName, value));
 
                     if(!"name".equals(curName)) {
 
@@ -92,7 +91,7 @@ public class Movie implements Serializable {
                                 fields.add(String.format(" MERGE (person:%s {name: \"%s\" })" +
                                         "ON CREATE SET person.name =  \"%s\" , person.created = \"%s\" , person.updated = \"%s\" " +
                                         "ON MATCH  SET person.name =  \"%s\" , person.updated = \"%s\" ",
-                                        curName, person, person, Utils.GetCurDate(), Utils.GetCurDate(), person, Utils.GetCurDate()));
+                                        curName, person, person, ObjectUtils.GetCurDate(), ObjectUtils.GetCurDate(), person, ObjectUtils.GetCurDate()));
 
                                 relationShips.add(String.format(" MATCH (m:movie {name: \"%s\" }) " +
                                                 "MATCH (a:%s {name: \"%s\"}) " +
@@ -106,7 +105,7 @@ public class Movie implements Serializable {
                             fields.add(String.format(" MERGE (person:%s {name: \"%s\" })" +
                                             "ON CREATE SET person.name =  \"%s\" , person.created = \"%s\" , person.updated = \"%s\" " +
                                             "ON MATCH  SET person.name =  \"%s\" , person.updated = \"%s\" ",
-                                    curName, value, value, Utils.GetCurDate(), Utils.GetCurDate(), value, Utils.GetCurDate()));
+                                    curName, value, value, ObjectUtils.GetCurDate(), ObjectUtils.GetCurDate(), value, ObjectUtils.GetCurDate()));
 
                             relationShips.add(String.format(" MATCH (m:movie {name: \"%s\" }) " +
                                             "MATCH (a:%s {name: \"%s\"}) " +
@@ -124,12 +123,12 @@ public class Movie implements Serializable {
 
         );
 
-        movie.append(String.format(" MERGE (m:movie, { name: \"%s\" }) " +
+        movie.append(String.format(" MERGE (m:movie { name: \"%s\" }) " +
                 " ON CREATE SET %s  m.created = \"%s\", m.updated = \"%s\" " +
                 " ON MATCH  SET %s  m.updated = \"%s\" " ,
                 getName(),
-                properties, Utils.GetCurDate(), Utils.GetCurDate(),
-                properties, Utils.GetCurDate()
+                properties, ObjectUtils.GetCurDate(), ObjectUtils.GetCurDate(),
+                properties, ObjectUtils.GetCurDate()
         ));
 
         session.run(movie.toString());
