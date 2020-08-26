@@ -4,6 +4,11 @@ import com.jansora.movie.dto.Result;
 
 public class ResultUtils {
 
+    public static Result FormatResult(boolean status) {
+        return Result.builder().status(status).message(null).data(null).total(0).build();
+    }
+
+
     public static Result FormatResult(boolean status, String message, Object data, Integer total) {
         return Result.builder().status(status).message(message).data(data).total(total).build();
     }

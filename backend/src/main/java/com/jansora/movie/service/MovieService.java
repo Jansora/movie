@@ -2,6 +2,10 @@ package com.jansora.movie.service;
 
 import com.jansora.movie.model.elasticsearch.Movie;
 import com.jansora.movie.repo.elaticsearch.MovieRepository;
+import com.jansora.movie.utils.ElasticSearchClient;
+import org.elasticsearch.client.ElasticsearchClient;
+import org.elasticsearch.client.RestClient;
+import org.elasticsearch.client.RestHighLevelClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
@@ -17,8 +21,9 @@ import reactor.core.publisher.Mono;
 public class MovieService {
 
 
+    private RestClient restClient = ElasticSearchClient.restClient;
+    private RestHighLevelClient restHighLevelClient = ElasticSearchClient.restHighLevelClient;
 
-    @Autowired
     private MovieRepository movieRepository;
 
 
